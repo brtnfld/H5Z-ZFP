@@ -158,7 +158,7 @@ H5Z_zfp_can_apply(hid_t dcpl_id, hid_t type_id, hid_t chunk_space_id)
        hasn't been compiled for 8-bit stream word size */
     if ((int) B stream_word_bits != 8)
         H5Z_ZFP_PUSH_AND_GOTO(H5E_PLINE, H5E_CANTINIT, -1,
-            "ZFP lib not compiled with -DBIT_STREAM_WORD_TYPE=uint8");
+            "ZFP lib not compiled with 8-bit word size (use -DBIT_STREAM_WORD_TYPE=uint8 for GNU Make or -DZFP_BIT_STREAM_WORD_SIZE=8 for CMake)");
 
     /* get datatype class, size and space dimensions */
     if (H5T_NO_CLASS == (dclass = H5Tget_class(type_id)))

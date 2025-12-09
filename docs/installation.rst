@@ -36,9 +36,12 @@ Compiling ZFP_
 
 * There is a ``Config`` file in top-level directory of the ZFP_ distribution that holds ``make`` variables the ZFP_ Makefiles use. By default, this file is setup for a vanilla GNU compiler.
   If this is not the appropriate compiler, edit ``Config`` as necessary to adjust the compiler and compilation flags.
-* An important flag you **will** need to adjust in order to use the ZFP_ library with this HDF5_ filter is the ``BIT_STREAM_WORD_TYPE`` CPP flag.
-  To use ZFP_ with H5Z-ZFP_, the ZFP_ library **must** be compiled with ``BIT_STREAM_WORD_TYPE`` of ``uint8``.
-  Typically, this is achieved by including a line in ``Config`` of the form ``DEFS += -DBIT_STREAM_WORD_TYPE=uint8``.
+* An important flag you **will** need to adjust in order to use the ZFP_ library with this HDF5_ filter is the bit stream word type.
+  To use ZFP_ with H5Z-ZFP_, the ZFP_ library **must** be compiled with 8-bit stream word size.
+
+  * **For GNU Make builds of ZFP**: Include a line in ``Config`` of the form ``DEFS += -DBIT_STREAM_WORD_TYPE=uint8``.
+  * **For CMake builds of ZFP**: Use the CMake option ``-DZFP_BIT_STREAM_WORD_SIZE=8`` when configuring ZFP.
+
   If you attempt to use this filter with a ZFP_ library compiled  differently from this, the  filter's ``can_apply`` method will always return false.
   This will result in silently ignoring an HDF5_ client's  request to compress data with ZFP_.
   Also, be sure to see :ref:`endian-issues`.
@@ -115,7 +118,7 @@ For example, it is possible to build ZFP_ with OpenMP support.
 The resulting CMake_ config files of ZFP_ build will make sure that this OpenMP dependency is correctly propagated to the build of H5Z-ZFP_ filter.
 However, for HDF5_ it is not necessary to build it with its CMake_ build system but it is strongly recommended.
 
-ZFP_ must have been :ref:`configured <zfp-config>` with ``BIT_STREAM_WORD_TYPE`` of ``uint8`` as described above.
+ZFP_ must have been :ref:`configured <zfp-config>` with 8-bit stream word size as described above (using ``-DZFP_BIT_STREAM_WORD_SIZE=8`` for CMake builds or ``-DBIT_STREAM_WORD_TYPE=uint8`` for GNU Make builds).
 
 Similar as for the Makefile installation, the CMake_ build system is designed such it compiles both the standalone HDF5_ *plugin* and a separate *library* an application can explicitly link. See :ref:`plugin-vs-library`
 
