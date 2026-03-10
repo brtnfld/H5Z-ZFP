@@ -79,6 +79,17 @@ if (NOT ZFP_FOUND)
 endif ()
 
 #------------------------------------------------------------------------------#
+# Plugin signing (optional - for use with HDF5 digital signature verification)
+#------------------------------------------------------------------------------#
+option(H5Z_ZFP_SIGN_PLUGIN "Sign the plugin shared library with h5sign after build" OFF)
+if (H5Z_ZFP_SIGN_PLUGIN)
+  set(H5Z_ZFP_SIGNING_KEY "" CACHE FILEPATH "Path to RSA private key PEM file for plugin signing")
+  # H5SIGN_TOOL is intentionally not pre-initialized here so that find_program
+  # in src/CMakeLists.txt can search for it.  Users may still pass
+  # -DH5SIGN_TOOL=/path/to/h5sign on the cmake command line to override.
+endif ()
+
+#------------------------------------------------------------------------------#
 # Add source
 #------------------------------------------------------------------------------#
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)

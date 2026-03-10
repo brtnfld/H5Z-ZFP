@@ -64,6 +64,30 @@ install(TARGETS h5z_zfp_shared
   LIBRARY DESTINATION plugin)
 
 #------------------------------------------------------------------------------#
+# Sign the plugin if H5Z_ZFP_SIGN_PLUGIN is enabled
+#------------------------------------------------------------------------------#
+if (H5Z_ZFP_SIGN_PLUGIN)
+  find_program(H5SIGN_TOOL h5sign
+    HINTS ${HDF5_ROOT}/bin ${HDF5_DIR}/../../../bin
+    DOC "Path to the h5sign tool")
+  if (NOT H5SIGN_TOOL)
+    message(FATAL_ERROR
+      "H5Z_ZFP_SIGN_PLUGIN is ON but h5sign was not found. "
+      "Set H5SIGN_TOOL to the path of the h5sign executable.")
+  endif ()
+  if (NOT H5Z_ZFP_SIGNING_KEY)
+    message(FATAL_ERROR
+      "H5Z_ZFP_SIGN_PLUGIN is ON but H5Z_ZFP_SIGNING_KEY is not set. "
+      "Set H5Z_ZFP_SIGNING_KEY to the path of the RSA private key PEM file.")
+  endif ()
+  add_custom_command(TARGET h5z_zfp_shared POST_BUILD
+    COMMAND ${H5SIGN_TOOL} -p $<TARGET_FILE:h5z_zfp_shared> -k ${H5Z_ZFP_SIGNING_KEY}
+    COMMENT "Signing plugin $<TARGET_FILE:h5z_zfp_shared>"
+    VERBATIM)
+  message(STATUS "Plugin signing enabled: key=${H5Z_ZFP_SIGNING_KEY}, tool=${H5SIGN_TOOL}")
+endif ()
+
+#------------------------------------------------------------------------------#
 # Install header and module files.
 #------------------------------------------------------------------------------#
 install(FILES ${h5z_zfp_headers}

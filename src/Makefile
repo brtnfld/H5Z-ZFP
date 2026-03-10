@@ -2,6 +2,9 @@ ifneq ($(strip $(MAKECMDGOALS)),clean)
     include ../config.make
 endif
 
+# Optional: path to h5sign tool (default: search PATH)
+H5SIGN ?= h5sign
+
 .PHONY: all lib clean
 
 # The filter compiled to be used as a plugin
@@ -19,6 +22,9 @@ plugin/libh5zzfp.$(SOEXT): H5Zzfp_plugin.o
 	$(CC) $< $(SHFLAG) -o plugin/libh5zzfp.$(SOEXT) \
 	    $(PREPATH)$(HDF5_LIB) $(PREPATH)$(ZFP_LIB) \
 	    -L$(ZFP_LIB) -L$(HDF5_LIB) -lhdf5 -lzfp $(LDFLAGS)
+ifdef SIGNING_KEY
+	$(H5SIGN) -p plugin/libh5zzfp.$(SOEXT) -k $(SIGNING_KEY)
+endif
 
 # Alias target for filter plugin
 plugin: plugin/libh5zzfp.$(SOEXT)
