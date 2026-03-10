@@ -121,6 +121,54 @@ followed by...
 
     cmake --build . --target install
 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Plugin Signing (Digital Signature Support)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When HDF5_ is built with ``HDF5_REQUIRE_SIGNED_PLUGINS=ON``, all dynamically loaded
+plugins must carry a digital signature or HDF5_ will refuse to load them.
+H5Z-ZFP_ supports this by optionally signing the plugin shared library as part of
+the CMake build using HDF5_'s ``h5sign`` tool.
+
+For a full description of the signing system — including how to generate keys,
+set up a keystore, and distribute plugins — see
+``release_docs/PLUGIN_SIGNATURE_README.md`` in the HDF5_ source tree.
+
+**Step 1: Generate an RSA key pair (one-time)**
+
+.. code-block:: bash
+
+    openssl genrsa -out my_private_key.pem 4096
+    chmod 600 my_private_key.pem
+    openssl rsa -in my_private_key.pem -pubout -out my_public_key.pem
+
+**Step 2: Build and sign H5Z-ZFP_**
+
+Pass ``-DH5Z_ZFP_SIGN_PLUGIN=ON`` and ``-DH5Z_ZFP_SIGNING_KEY`` to CMake.
+The ``h5sign`` tool is searched automatically in ``PATH`` and ``HDF5_ROOT/bin``::
+
+    cmake -DH5Z_ZFP_SIGN_PLUGIN=ON \
+          -DH5Z_ZFP_SIGNING_KEY=<path-to-private-key.pem> \
+          <other-options> <src-dir>
+    cmake --build .
+
+If ``h5sign`` is not found automatically, specify it with ``-DH5SIGN_TOOL``::
+
+    cmake -DH5Z_ZFP_SIGN_PLUGIN=ON \
+          -DH5Z_ZFP_SIGNING_KEY=<path-to-private-key.pem> \
+          -DH5SIGN_TOOL=<path-to-h5sign> \
+          <other-options> <src-dir>
+
+**Step 3: Distribute and install**
+
+Provide users with the signed plugin (``libh5zzfp.so`` / ``.dylib``) and
+``my_public_key.pem``.  Users must place the public key in their HDF5_ keystore
+directory and point HDF5_ to it::
+
+    mkdir -p ~/.hdf5/keystore
+    cp my_public_key.pem ~/.hdf5/keystore/
+    export HDF5_PLUGIN_KEYSTORE=~/.hdf5/keystore
+
 ^^^^^^^^^^^^^
 Running Tests
 ^^^^^^^^^^^^^
