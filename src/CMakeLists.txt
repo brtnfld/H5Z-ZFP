@@ -18,7 +18,7 @@ endif ()
 add_library(h5z_zfp_static STATIC ${h5z_zfp_lib_source})
 target_compile_definitions(h5z_zfp_static PRIVATE
   H5Z_ZFP_AS_LIB
-  $<$<BOOL:${H5ZFP_WITH_RFC_2026_001}>:H5Z_ZFP_USE_CLASS3>)
+  $<$<BOOL:${H5ZFP_USE_CLASS3}>:H5Z_ZFP_USE_CLASS3>)
 target_include_directories(h5z_zfp_static
   PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
@@ -49,7 +49,7 @@ set(h5z_zfp_plugin_source
 
 add_library(h5z_zfp_shared SHARED ${h5z_zfp_plugin_source})
 target_compile_definitions(h5z_zfp_shared PRIVATE
-  $<$<BOOL:${H5ZFP_WITH_RFC_2026_001}>:H5Z_ZFP_USE_CLASS3>)
+  $<$<BOOL:${H5ZFP_USE_CLASS3}>:H5Z_ZFP_USE_CLASS3>)
 target_include_directories(h5z_zfp_shared
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>

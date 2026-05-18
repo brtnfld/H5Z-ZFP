@@ -9,11 +9,11 @@ https://raw.githubusercontent.com/LLNL/H5Z-ZFP/master/LICENSE
 */
 
 /*
- * Tests for RFC-HDFG-2026-001 string-based filter configuration API
- * (H5Z_class3_t with set_config / get_config callbacks).
+ * Tests for the H5Z_class3_t string-based filter configuration API
+ * (set_config / get_config callbacks).
  *
  * Only compiled when H5Z_ZFP_USE_CLASS3 is defined (i.e. when
- * H5ZFP_WITH_RFC_2026_001=ON is passed to CMake).
+ * H5ZFP_USE_CLASS3=ON is passed to CMake).
  */
 
 #ifdef H5Z_ZFP_USE_CLASS3
@@ -587,7 +587,7 @@ int main(int argc, char **argv)
 
 int main(void)
 {
-    /* This test requires H5ZFP_WITH_RFC_2026_001=ON */
+    /* This test requires H5ZFP_USE_CLASS3=ON */
     return 77; /* CTest SKIP exit code */
 }
 

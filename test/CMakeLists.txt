@@ -944,9 +944,9 @@ if (NOT MSVC)
 endif ()
 
 #------------------------------------------------------------------------------#
-# RFC-HDFG-2026-001 string-configuration tests (requires H5ZFP_WITH_RFC_2026_001=ON)
+# H5Z_class3_t string-configuration tests (requires H5ZFP_USE_CLASS3=ON)
 #------------------------------------------------------------------------------#
-if (H5ZFP_WITH_RFC_2026_001)
+if (H5ZFP_USE_CLASS3)
   add_executable(test_str_config test_str_config.c)
   target_compile_definitions(test_str_config PRIVATE H5Z_ZFP_USE_CLASS3)
   target_link_libraries(test_str_config h5z_zfp_static)
